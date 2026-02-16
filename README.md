@@ -58,6 +58,71 @@ Compara HTML estático vs JavaScript para detectar problemas de renderizado.
 ```
 Ejecuta ambas auditorías en paralelo y genera un informe unificado.
 
+## Cómo subir skills nuevos a este repo
+
+Si creas o modificas skills y quieres subirlos a GitHub:
+
+### Primera vez (clonar el repo)
+
+```bash
+git clone https://github.com/ainhoasdlc/audit-seo.git
+cd audit-seo
+```
+
+### Añadir o actualizar skills
+
+1. Copia los archivos `.md` de tus skills a `.claude/commands/`:
+
+```bash
+cp /ruta/a/tu/proyecto/.claude/commands/mi-skill.md .claude/commands/
+```
+
+2. **Parametriza las rutas de Python** antes de subir. Reemplaza cualquier ruta hardcodeada por `$PYTHON`:
+
+```
+# MAL (hardcodeado, no funcionará en otros equipos)
+"C:\Users\tu_usuario\AppData\Local\Programs\Python\Python310\python.exe" -c "import pandas..."
+
+# BIEN (parametrizado, portable)
+$PYTHON -c "import pandas..."
+```
+
+3. Verifica que no queden rutas personales:
+
+```bash
+grep -r "Users/" .claude/commands/
+# No debería devolver resultados
+```
+
+4. Commit y push:
+
+```bash
+git add .claude/commands/mi-skill.md
+git commit -m "Add mi-skill: descripción breve"
+git push
+```
+
+### Subir desde un proyecto existente de Claude Code
+
+Si tu proyecto ya tiene un `.git` con archivos pesados (Excel, crawls, etc.), el push puede fallar por timeout. En ese caso, crea un directorio de export limpio:
+
+```bash
+# Crear directorio limpio
+mkdir -p github-export/.claude/commands
+
+# Copiar solo los skills
+cp .claude/commands/mi-skill.md github-export/.claude/commands/
+
+# Inicializar repo limpio y push
+cd github-export
+git init
+git remote add origin https://github.com/ainhoasdlc/audit-seo.git
+git pull origin main
+git add .
+git commit -m "Add mi-skill"
+git push origin main
+```
+
 ## Reglas SEO integradas
 
 Los skills aplican automáticamente estas reglas:
